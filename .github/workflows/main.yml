@@ -1,0 +1,23 @@
+name: Deploy to Surge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Surge
+      run: |
+        npm install --global surge
+        surge login --token ${{ secrets.SURGE_API_KEY }}
+
+    - name: Deploy to Surge
+      run: |
+        surge --project ./ --domain mi-pagina-web-${{ github.sha }}.surge.sh
